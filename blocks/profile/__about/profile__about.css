@@ -1,4 +1,4 @@
-.profile__definition {
+.profile__about {
   font-family: 'Inter', Arial, Helvetica, sans-serif;
   font-size: 14px;
   line-height: 17px;
@@ -8,14 +8,14 @@
 }
 
 @media screen and (min-width:768px) {
-  .profile__definition {
+  .profile__about {
     margin-bottom: 0;
     text-align: left;
   }
 }
 
 @media screen and (min-width:1024px) {
-  .profile__definition {
+  .profile__about {
     font-size: 18px;
     line-height: 22px;
   }
