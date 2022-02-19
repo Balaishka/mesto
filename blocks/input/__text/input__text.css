@@ -1,6 +1,19 @@
 .input__text {
   border: none;
   border-bottom: 1px solid rgba(0, 0, 0, .2);
-  padding: 0 0 13px;
+  display: block;
+  padding: 11px 0;
   box-sizing: border-box;
+  font-family: 'Inter', Arial, Helvetica, sans-serif;
+  font-size: 14px;
+  line-height: 17px;
+  margin-bottom: 17px;
+  color: #000;
+  width: 100%;
+}
+
+.input__text:focus-visible {
+  border-color: #000;
+  box-shadow: none;
+  outline: none;
 }
