@@ -1,4 +1,4 @@
-.input__save-btn {
+.edit__save-btn {
   display: block;
   margin-top: 45px;
   background-color: #000;
@@ -16,12 +16,12 @@
   width: 100%;
 }
 
-.input__save-btn:hover {
+.edit__save-btn:hover {
   opacity: .8;
 }
 
 @media screen and (min-width:768px) {
-  .input__save-btn {
+  .edit__save-btn {
     font-size: 18px;
     line-height: 22px;
     margin-top: 48px;

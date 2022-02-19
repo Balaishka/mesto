@@ -1,4 +1,4 @@
-.input__text {
+.edit__text {
   border: none;
   border-bottom: 1px solid rgba(0, 0, 0, .2);
   display: block;
@@ -12,7 +12,7 @@
   width: 100%;
 }
 
-.input__text:focus-visible {
+.edit__text:focus-visible {
   border-color: #000;
   box-shadow: none;
   outline: none;
