@@ -11,6 +11,12 @@
   .profile__about {
     margin-bottom: 0;
     text-align: left;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    padding-right: 20px;
   }
 }
 

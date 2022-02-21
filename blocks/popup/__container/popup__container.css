@@ -7,7 +7,6 @@
   flex-direction: column;
   justify-content: space-between;
   max-width: 430px;
-  min-height: 322px;
   padding: 25px 22px;
   position: relative;
   width: calc(100% - 38px);
@@ -16,6 +15,5 @@
 @media screen and (min-width:768px) {
   .popup__container {
     padding: 34px 36px 37px;
-    min-height: 330px;
   }
 }

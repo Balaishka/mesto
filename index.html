@@ -10,7 +10,6 @@
     <div class="page">
       <header class="header">
         <img src="./images/logo.svg" alt="Логотип" class="header__logo" />
-        <div class="header__line"></div>
       </header>
 
       <main class="content">
@@ -24,12 +23,12 @@
             <div>
               <div class="profile__edit">
                 <h1 class="profile__name">Жак-Ив Кусто</h1>
-                <button class="profile__edit-btn"></button>
+                <button type="button" class="profile__edit-btn" aria-label="Редактировать"></button>
               </div>
               <p class="profile__about">Исследователь океана</p>
             </div>
           </div>
-          <button class="profile__add-btn"></button>
+          <button type="button" class="profile__add-btn" aria-label="Добавить"></button>
         </section>
 
         <section class="photos">
@@ -42,7 +41,7 @@
               />
               <div class="photo__info">
                 <h2 class="photo__name">Карачаевск</h2>
-                <button class="photo__like-btn"></button>
+                <button type="button" class="photo__like-btn" aria-label="Нравится"></button>
               </div>
             </li>
             <li class="photo">
@@ -53,7 +52,7 @@
               />
               <div class="photo__info">
                 <h2 class="photo__name">Гора Эльбрус</h2>
-                <button class="photo__like-btn"></button>
+                <button type="button" class="photo__like-btn" aria-label="Нравится"></button>
               </div>
             </li>
             <li class="photo">
@@ -64,7 +63,7 @@
               />
               <div class="photo__info">
                 <h2 class="photo__name">Домбай</h2>
-                <button class="photo__like-btn"></button>
+                <button type="button" class="photo__like-btn" aria-label="Нравится"></button>
               </div>
             </li>
             <li class="photo">
@@ -75,7 +74,7 @@
               />
               <div class="photo__info">
                 <h2 class="photo__name">Гора Эльбрус</h2>
-                <button class="photo__like-btn"></button>
+                <button type="button" class="photo__like-btn" aria-label="Нравится"></button>
               </div>
             </li>
             <li class="photo">
@@ -86,7 +85,7 @@
               />
               <div class="photo__info">
                 <h2 class="photo__name">Домбай</h2>
-                <button class="photo__like-btn"></button>
+                <button type="button" class="photo__like-btn" aria-label="Нравится"></button>
               </div>
             </li>
             <li class="photo">
@@ -97,7 +96,7 @@
               />
               <div class="photo__info">
                 <h2 class="photo__name">Карачаевск</h2>
-                <button class="photo__like-btn"></button>
+                <button type="button" class="photo__like-btn" aria-label="Нравится"></button>
               </div>
             </li>
           </ul>
@@ -105,17 +104,17 @@
       </main>
 
       <footer class="footer">
-        <p class="footer__copyright">&#169; 2022 Mesto Russia</p>
+        <p class="footer__copyright">&copy; 2022 Mesto Russia</p>
       </footer>
 
       <div class="popup">
         <div class="popup__container">
-          <button class="popup__close-btn"></button>
+          <button type="button" class="popup__close-btn" aria-label="Закрыть"></button>
           <h3 class="popup__title">Редактировать профиль</h3>
-          <form class="edit">
-            <input type="text" class="edit__text edit__text_type_name" />
-            <input type="text" class="edit__text edit__text_type_about" />
-            <button class="edit__save-btn" type="submit">Сохранить</button>
+          <form class="edit" name="edit-form">
+            <input type="text" class="edit__text edit__text_type_name" name="edit-name" />
+            <input type="text" class="edit__text edit__text_type_about"  name="edit-about" />
+            <button type="submit" class="edit__save-btn" aria-label="Сохранить">Сохранить</button>
           </form>
         </div>
       </div>
