@@ -30,14 +30,27 @@ const photos = [
 const page = document.querySelector(".page");
 const edit = page.querySelector(".profile__edit-btn");
 const popupEdit = page.querySelector(".popup_name_edit");
-const formElement = popupEdit.querySelector(".edit");
+const formElementEdit = popupEdit.querySelector(".form_edit");
+
+// Находим значения name и about
+let profileName = page.querySelector(".profile__name");
+let profileAbout = page.querySelector(".profile__about");
+
+// Находим текстовые поля name и about в форме
+let editName = formElementEdit.querySelector(".form__text_type_name");
+let editAbout = formElementEdit.querySelector(".form__text_type_about");
 
 // Находим нужные кнопки и значения для фотографий
 const photoList = document.querySelector(".photos__list");
 const popupAddPhoto = document.querySelector(".popup_name_add-photo");
 const add = document.querySelector(".profile__add-btn");
+const formElementAddPhoto = popupAddPhoto.querySelector(".form_add-photo");
 
-// Рендеринг фотографий из массива на страницу
+// Находим текстовые поля title и link в форме
+let addTitle = formElementAddPhoto.querySelector(".form__text_type_title");
+let addLink = formElementAddPhoto.querySelector(".form__text_type_link");
+
+// Добавление карточки
 function renderPhoto(photo) {
   const photoCard = document.querySelector(".photo-template").content.firstElementChild.cloneNode(true); // Клонируем photo-template
 
@@ -45,35 +58,38 @@ function renderPhoto(photo) {
   photoCard.querySelector(".photo__img").src = photo.link; // Добавляем ссылку на картинку из массива
   photoCard.querySelector(".photo__img").alt = photo.name; // Добавляем alt картинки из массива
 
-  photoList.append(photoCard); // Добавляем карточку
+  photoList.prepend(photoCard); // Добавляем карточку
 }
 
-// Добавление фотографии
-function addPhoto(event) {
-  event.preventDefault(); // Отменяем стандартные функции отправки формы
+// Обработчик «отправки» формы добавления карточки
+function formSubmitHandlerCreate(event) {
+  event.preventDefault(); // Эта строчка отменяет стандартную отправку формы.
 
-  /*const newTodoText = event.currentTarget.querySelector(".todos__input").value;
+  // Проверка на заполненность полей (для тренировки)
+    if (!addTitle.value) {
+      addTitle.classList.add("form__text_error");
+    } else {
+      addTitle.classList.remove("form__text_error");
+    }
 
-  if (editingTodo) {
-    editingTodo.querySelector(".todo__text").textContent = newTodoText;
+    if(!addLink.value) {
+      addLink.classList.add("form__text_error");
+    } else {
+      addLink.classList.remove("form__text_error");
+    }
 
-    todoFormSubmitBtn.textContent = "Добавить";
+    if (addTitle.value && addLink.value) {
+      // Создаем объект с введенной информацией
+      let photo = {
+        name: addTitle.value,
+        link: addLink.value
+      };
 
-    editingTodo = null;
-  } else {
-    renderTodo(newTodoText);
-  }
+      renderPhoto(photo);// Формируем карточку
 
-  event.currentTarget.reset();*/
+      closePopup(popupAddPhoto);//Закрываем попап
+    }
 }
-
-// Находим значения name и about
-let profileName = page.querySelector(".profile__name");
-let profileAbout = page.querySelector(".profile__about");
-
-// Находим текстовые поля name и about в форме
-let editName = formElement.querySelector(".edit__text_type_name");
-let editAbout = formElement.querySelector(".edit__text_type_about");
 
 // Открыть попап
 function openPopup(popupName) {
@@ -86,6 +102,9 @@ function openPopup(popupName) {
     // Вставляем в текстовые поля значения из профиля
     editName.value = profileName.textContent;
     editAbout.value = profileAbout.textContent;
+  } else if (popupName === popupAddPhoto) {
+    addTitle.value = '';
+    addLink.value = '';
   }
 }
 
@@ -94,9 +113,9 @@ function closePopup(popupName) {
   popupName.classList.remove("popup_opened");
 }
 
-// Обработчик «отправки» формы редактирования формы
-function formSubmitHandler(evt) {
-  evt.preventDefault(); // Эта строчка отменяет стандартную отправку формы.
+// Обработчик «отправки» формы редактирования
+function formSubmitHandlerEdit(event) {
+  event.preventDefault(); // Эта строчка отменяет стандартную отправку формы.
 
   // Получите значение полей editName и editAbout из свойства value
   let newName = editName.value;
@@ -109,8 +128,8 @@ function formSubmitHandler(evt) {
   closePopup(popupEdit);
 }
 
-// Прикрепляем обработчик к форме:
-formElement.addEventListener("submit", formSubmitHandler);
+// Прикрепляем обработчик к форме редактирования:
+formElementEdit.addEventListener("submit", formSubmitHandlerEdit);
 
 edit.addEventListener("click", () => {openPopup(popupEdit)});
 
@@ -119,3 +138,6 @@ photos.map(renderPhoto);
 
 // Открываем попап добавления фотографии
 add.addEventListener("click", () => {openPopup(popupAddPhoto)});
+
+// Прикрепляем обработчик к форме добавления фотографии:
+formElementAddPhoto.addEventListener("submit", formSubmitHandlerCreate);
