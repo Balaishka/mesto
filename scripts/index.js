@@ -1,4 +1,3 @@
-// Массив фотографий
 const photos = [
   {
     name: 'Архыз',
@@ -60,10 +59,11 @@ document.body.addEventListener("click", (event) => {
 
   if (event.target.classList.contains("photo__like-btn")) {
     likePhoto(photo);
+  } else if (event.target.classList.contains("photo__delete-btn")) {
+    deletePhoto(photo);
   }
 });
 
-// Добавление карточки
 function renderPhoto(photo) {
   const photoCard = document.querySelector(".photo-template").content.firstElementChild.cloneNode(true); // Клонируем photo-template
 
@@ -74,7 +74,10 @@ function renderPhoto(photo) {
   photoList.prepend(photoCard); // Добавляем карточку
 }
 
-// Лайк на фото
+function deletePhoto(photo) {
+  photo.remove();
+}
+
 function likePhoto (photo) {
   const photoBtn = photo.querySelector(".photo__like-btn");
 
@@ -96,7 +99,6 @@ function formSubmitHandlerCreate(event) {
       closePopup(popupAddPhoto);//Закрываем попап
 }
 
-// Открыть попап
 function openPopup(popupName) {
   popupName.classList.add("popup_opened");
   
@@ -113,7 +115,6 @@ function openPopup(popupName) {
   }
 }
 
-// Закрыть попап
 function closePopup(popupName) {
   popupName.classList.remove("popup_opened");
 }
@@ -122,27 +123,23 @@ function closePopup(popupName) {
 function formSubmitHandlerEdit(event) {
   event.preventDefault(); // Эта строчка отменяет стандартную отправку формы.
 
-  // Получите значение полей editName и editAbout из свойства value
+  // Получаем значение полей editName и editAbout из свойства value
   let newName = editName.value;
   let newAbout = editAbout.value;
 
-  // Вставьте новые значения с помощью textContent
+  // Вставляем новые значения с помощью textContent
   profileName.textContent = newName;
   profileAbout.textContent = newAbout;
 
   closePopup(popupEdit);
 }
 
-// Прикрепляем обработчик к форме редактирования:
-formElementEdit.addEventListener("submit", formSubmitHandlerEdit);
+photos.map(renderPhoto);// Запускаем рендеринг фотографий
 
-edit.addEventListener("click", () => {openPopup(popupEdit)});
+formElementEdit.addEventListener("submit", formSubmitHandlerEdit);// Прикрепляем обработчик к форме редактирования
 
-// Запускаем рендеринг фотографий
-photos.map(renderPhoto);
+edit.addEventListener("click", () => {openPopup(popupEdit)});//Открываем попап редактирования профиля
 
-// Открываем попап добавления фотографии
-add.addEventListener("click", () => {openPopup(popupAddPhoto)});
+add.addEventListener("click", () => {openPopup(popupAddPhoto)});// Открываем попап добавления фотографии
 
-// Прикрепляем обработчик к форме добавления фотографии:
-formElementAddPhoto.addEventListener("submit", formSubmitHandlerCreate);
+formElementAddPhoto.addEventListener("submit", formSubmitHandlerCreate);// Прикрепляем обработчик к форме добавления фотографии
