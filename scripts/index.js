@@ -42,12 +42,17 @@ let editAbout = formElementEdit.querySelector(".form__text_type_about");
 // Находим нужные кнопки и значения для фотографий
 const photoList = document.querySelector(".photos__list");
 const popupAddPhoto = document.querySelector(".popup_name_add-photo");
+const popupPicture = document.querySelector(".popup_name_picture");
 const add = document.querySelector(".profile__add-btn");
 const formElementAddPhoto = popupAddPhoto.querySelector(".form_add-photo");
 
 // Находим текстовые поля title и link в форме
 let addTitle = formElementAddPhoto.querySelector(".form__text_type_title");
 let addLink = formElementAddPhoto.querySelector(".form__text_type_link");
+
+// Находим поля title и Img в попапе
+let pictureTitle = popupPicture.querySelector(".popup__picture-title");
+let pictureImg = popupPicture.querySelector(".popup__picture");
 
 // Обработчик кликов по кнопкам лайк и удаление
 document.body.addEventListener("click", (event) => {
@@ -61,6 +66,12 @@ document.body.addEventListener("click", (event) => {
     likePhoto(photo);
   } else if (event.target.classList.contains("photo__delete-btn")) {
     deletePhoto(photo);
+  } else if (event.target.classList.contains("photo__img")) {
+    openPopup(popupPicture);
+
+    pictureTitle.textContent = photo.querySelector(".photo__name").textContent;
+    pictureImg.src = photo.querySelector(".photo__img").src;
+    pictureImg.alt = photo.querySelector(".photo__img").alt;
   }
 });
 
