@@ -50,6 +50,19 @@ const formElementAddPhoto = popupAddPhoto.querySelector(".form_add-photo");
 let addTitle = formElementAddPhoto.querySelector(".form__text_type_title");
 let addLink = formElementAddPhoto.querySelector(".form__text_type_link");
 
+// Обработчик кликов по кнопкам лайк и удаление
+document.body.addEventListener("click", (event) => {
+  const photo = event.target.closest(".photo");
+
+  if (!photo) {
+    return;
+  }
+
+  if (event.target.classList.contains("photo__like-btn")) {
+    likePhoto(photo);
+  }
+});
+
 // Добавление карточки
 function renderPhoto(photo) {
   const photoCard = document.querySelector(".photo-template").content.firstElementChild.cloneNode(true); // Клонируем photo-template
@@ -61,24 +74,17 @@ function renderPhoto(photo) {
   photoList.prepend(photoCard); // Добавляем карточку
 }
 
+// Лайк на фото
+function likePhoto (photo) {
+  const photoBtn = photo.querySelector(".photo__like-btn");
+
+  photoBtn.classList.toggle("photo__like-btn_active");
+}
+
 // Обработчик «отправки» формы добавления карточки
 function formSubmitHandlerCreate(event) {
   event.preventDefault(); // Эта строчка отменяет стандартную отправку формы.
 
-  // Проверка на заполненность полей (для тренировки)
-    if (!addTitle.value) {
-      addTitle.classList.add("form__text_error");
-    } else {
-      addTitle.classList.remove("form__text_error");
-    }
-
-    if(!addLink.value) {
-      addLink.classList.add("form__text_error");
-    } else {
-      addLink.classList.remove("form__text_error");
-    }
-
-    if (addTitle.value && addLink.value) {
       // Создаем объект с введенной информацией
       let photo = {
         name: addTitle.value,
@@ -88,7 +94,6 @@ function formSubmitHandlerCreate(event) {
       renderPhoto(photo);// Формируем карточку
 
       closePopup(popupAddPhoto);//Закрываем попап
-    }
 }
 
 // Открыть попап
