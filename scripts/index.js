@@ -54,62 +54,8 @@ let addLink = formElementAddPhoto.querySelector(".form__text_type_link");
 let pictureTitle = popupPicture.querySelector(".popup__picture-title");
 let pictureImg = popupPicture.querySelector(".popup__picture");
 
-// Обработчик кликов по кнопкам лайк и удаление на фотографиях
-document.body.addEventListener("click", (event) => {
-  const photo = event.target.closest(".photo");
-
-  if (!photo) {
-    return;
-  }
-
-  if (event.target.classList.contains("photo__like-btn")) {
-    likePhoto(photo);
-  } else if (event.target.classList.contains("photo__delete-btn")) {
-    deletePhoto(photo);
-  } else if (event.target.classList.contains("photo__img")) {
-    openPopup(popupPicture);
-
-    pictureTitle.textContent = photo.querySelector(".photo__name").textContent;
-    pictureImg.src = photo.querySelector(".photo__img").src;
-    pictureImg.alt = photo.querySelector(".photo__img").alt;
-  }
-});
-
-function renderPhoto(photo) {
-  const photoCard = document
-    .querySelector(".photo-template")
-    .content.firstElementChild.cloneNode(true); // Клонируем photo-template
-
-  photoCard.querySelector(".photo__name").textContent = photo.name; // Добавляем имя карточки из массива
-  photoCard.querySelector(".photo__img").src = photo.link; // Добавляем ссылку на картинку из массива
-  photoCard.querySelector(".photo__img").alt = photo.name; // Добавляем alt картинки из массива
-
-  photoList.prepend(photoCard); // Добавляем карточку
-}
-
-function deletePhoto(photo) {
-  photo.remove();
-}
-
-function likePhoto(photo) {
-  const photoBtn = photo.querySelector(".photo__like-btn");
-
-  photoBtn.classList.toggle("photo__like-btn_active");
-}
-
-// Обработчик «отправки» формы добавления карточки
-function formSubmitHandlerCreate(event) {
-  event.preventDefault(); // Эта строчка отменяет стандартную отправку формы
-
-  // Создаем объект с введенной информацией
-  let photo = {
-    name: addTitle.value,
-    link: addLink.value,
-  };
-
-  renderPhoto(photo); // Формируем карточку
-
-  closePopup(popupAddPhoto); //Закрываем попап
+function closePopup(popupName) {
+  popupName.classList.remove("popup_opened");
 }
 
 function openPopup(popupName) {
@@ -132,8 +78,62 @@ function openPopup(popupName) {
   }
 }
 
-function closePopup(popupName) {
-  popupName.classList.remove("popup_opened");
+function deletePhoto(photo) {
+  photo.remove();
+}
+
+function likePhoto(photo) {
+  const photoBtn = photo.querySelector(".photo__like-btn");
+
+  photoBtn.classList.toggle("photo__like-btn_active");
+}
+
+// Обработчик кликов по кнопкам лайк и удаление на фотографиях
+document.body.addEventListener("click", (event) => {
+  const photo = event.target.closest(".photo");
+
+  if (!photo) {
+    return;
+  }
+
+  if (event.target.classList.contains("photo__like-btn")) {
+    likePhoto(photo);
+  } else if (event.target.classList.contains("photo__delete-btn")) {
+    deletePhoto(photo);
+  } else if (event.target.classList.contains("photo__img")) {
+    pictureTitle.textContent = photo.querySelector(".photo__name").textContent;
+    pictureImg.src = photo.querySelector(".photo__img").src;
+    pictureImg.alt = photo.querySelector(".photo__img").alt;
+
+    openPopup(popupPicture);
+  }
+});
+
+function renderPhoto(photo) {
+  const photoCard = document
+    .querySelector(".photo-template")
+    .content.firstElementChild.cloneNode(true); // Клонируем photo-template
+
+  photoCard.querySelector(".photo__name").textContent = photo.name; // Добавляем имя карточки из массива
+  photoCard.querySelector(".photo__img").src = photo.link; // Добавляем ссылку на картинку из массива
+  photoCard.querySelector(".photo__img").alt = photo.name; // Добавляем alt картинки из массива
+
+  photoList.prepend(photoCard); // Добавляем карточку
+}
+
+// Обработчик «отправки» формы добавления карточки
+function formSubmitHandlerCreate(event) {
+  event.preventDefault(); // Эта строчка отменяет стандартную отправку формы
+
+  // Создаем объект с введенной информацией
+  let photo = {
+    name: addTitle.value,
+    link: addLink.value,
+  };
+
+  renderPhoto(photo); // Формируем карточку
+
+  closePopup(popupAddPhoto); //Закрываем попап
 }
 
 // Обработчик «отправки» формы редактирования
