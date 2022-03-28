@@ -1,14 +1,14 @@
 .form__btn {
   display: block;
-  margin-top: 25px;
+  margin-top: 45px;
   background-color: #000;
   border-radius: 2px;
-  border: none;
+  border: 1px solid #000;
   cursor: pointer;
   font-family: 'Inter', Arial, Helvetica, sans-serif;
   font-size: 14px;
   line-height: 17px;
-  padding: 14px 0;
+  padding: 13px 0;
   text-align: center;
   transition: opacity .2s ease-in-out;
   opacity: 1;
@@ -24,6 +24,6 @@
   .form__btn {
     font-size: 18px;
     line-height: 22px;
-    margin-top: 28px;
+    margin-top: 48px;
   }
 }

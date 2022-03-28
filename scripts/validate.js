@@ -1,3 +1,5 @@
+const formList = Array.from(document.querySelectorAll(".form")); // Находим все формы на странице
+
 // Показываем текст ошибки
 function showInputError(form, formElement, input, errorMessage) {
   const errorElement = formElement.querySelector(`.${input.id}-error`);
@@ -18,10 +20,8 @@ function hideInputError(form, formElement, input) {
 function checkValid(form, formElement, input) {
   if (!input.validity.valid) {
     showInputError(form, formElement, input, input.validationMessage);
-    return true;
   } else {
     hideInputError(form, formElement, input);
-    return false;
   }
 }
 
@@ -62,7 +62,7 @@ function setEventListeners(form, formElement) {
 
 // Создаем функцию вызова валидации
 function enableValidation(form) {
-  const formElement = page.querySelector(form.formSelector); // Переданная форма
+  const formElement = form.formSelector;
 
   formElement.addEventListener("submit", function (event) {
     event.preventDefault();
@@ -71,20 +71,13 @@ function enableValidation(form) {
   setEventListeners(form, formElement);
 }
 
-// Включаем валидацию формы редактирования
-enableValidation({
-  formSelector: ".form_edit",
-  inputSelector: ".form__text",
-  submitButtonSelector: ".form__btn",
-  inactiveButtonClass: "form__btn_disabled",
-  inputErrorClass: "form__text_invalid",
-});
-
-// Включаем валидацию формы добавления фото
-enableValidation({
-  formSelector: ".form_add-photo",
-  inputSelector: ".form__text",
-  submitButtonSelector: ".form__btn",
-  inactiveButtonClass: "form__btn_disabled",
-  inputErrorClass: "form__text_invalid",
+// Подключаем валидацию ко всем формам на странице
+formList.forEach((formElement) => {
+  enableValidation({
+    formSelector: formElement,
+    inputSelector: ".form__text",
+    submitButtonSelector: ".form__btn",
+    inactiveButtonClass: "form__btn_disabled",
+    inputErrorClass: "form__text_invalid",
+  });
 });
