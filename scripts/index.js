@@ -2,39 +2,13 @@ import { Card } from "./Card.js";
 
 import { FormValidator } from "./FormValidator.js";
 
-const photos = [
-  {
-    name: "Архыз",
-    link: "https://pictures.s3.yandex.net/frontend-developer/cards-compressed/arkhyz.jpg",
-  },
-  {
-    name: "Челябинская область",
-    link: "https://pictures.s3.yandex.net/frontend-developer/cards-compressed/chelyabinsk-oblast.jpg",
-  },
-  {
-    name: "Иваново",
-    link: "https://pictures.s3.yandex.net/frontend-developer/cards-compressed/ivanovo.jpg",
-  },
-  {
-    name: "Камчатка",
-    link: "https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kamchatka.jpg",
-  },
-  {
-    name: "Холмогорский район",
-    link: "https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kholmogorsky-rayon.jpg",
-  },
-  {
-    name: "Байкал",
-    link: "https://pictures.s3.yandex.net/frontend-developer/cards-compressed/baikal.jpg",
-  },
-];
+import { photos } from "./cards.js";
 
 // Находим нужные кнопки и блоки профиля
 const page = document.querySelector(".page");
 const buttonEdit = page.querySelector(".profile__edit-btn");
 const popupEdit = page.querySelector(".popup_name_edit");
 const formElementEdit = popupEdit.querySelector(".form_edit");
-const buttonFormEdit = formElementEdit.querySelector(".form__btn_type_edit");
 
 // Находим значения name и about профиля
 const profileName = page.querySelector(".profile__name");
@@ -44,27 +18,16 @@ const profileAbout = page.querySelector(".profile__about");
 const nameEdit = formElementEdit.querySelector(".form__text_type_name");
 const aboutEdit = formElementEdit.querySelector(".form__text_type_about");
 
-// Находим текстовые поля ошибок name и about в форме профиля
-const nameError = formElementEdit.querySelector(".name-input-error");
-const aboutError = formElementEdit.querySelector(".about-input-error");
-
 // Находим нужные кнопки и значения фотографий
 const photoList = document.querySelector(".photos__list");
 const popupAddPhoto = document.querySelector(".popup_name_add-photo");
 const popupPicture = document.querySelector(".popup_name_picture");
 const buttonAdd = document.querySelector(".profile__add-btn");
 const formElementAddPhoto = popupAddPhoto.querySelector(".form_add-photo");
-const buttonFormAddPhoto = formElementAddPhoto.querySelector(
-  ".form__btn_type_add-photo"
-);
 
 // Находим текстовые поля title и link в форме фотографий
 const titleAdd = formElementAddPhoto.querySelector(".form__text_type_title");
 const linkAdd = formElementAddPhoto.querySelector(".form__text_type_link");
-
-// Находим текстовые поля ошибок title и link в форме фотографий
-const titleError = formElementAddPhoto.querySelector(".title-input-error");
-const linkError = formElementAddPhoto.querySelector(".link-input-error");
 
 // Находим поля title и Img в попапе фотографий
 const pictureTitle = popupPicture.querySelector(".popup__picture-title");
@@ -81,6 +44,24 @@ const btnClosePicture = popupPicture.querySelector(
 
 // Находим все формы на странице
 const formList = Array.from(document.querySelectorAll(".form")); // Находим все формы на странице
+
+// Элементы форм
+const formElements = {
+  inputSelector: ".form__text",
+  submitButtonSelector: ".form__btn",
+  inactiveButtonClass: "form__btn_disabled",
+  inputErrorClass: "form__text_invalid",
+};
+
+const inputListEdit = formElementEdit.querySelectorAll(".form__text"); // Находим текстовые поля в форме профиля
+const inputListAddPhoto = formElementAddPhoto.querySelectorAll(".form__text"); // Находим текстовые поля в форме добавления фото
+
+const formValidatorEdit = new FormValidator(formElements, formElementEdit); // Создаем класс формы редактирования
+
+const formValidatorAddPhoto = new FormValidator(
+  formElements,
+  formElementAddPhoto
+); // Создаем класс формы добавления фото
 
 function closePopup(popup) {
   popup.classList.remove("popup_opened");
@@ -108,10 +89,14 @@ function openPopup(popup) {
   document.addEventListener("keydown", closePopupEsc);
 }
 
+function addCardToCardlist(photo) {
+  photoList.prepend(photo); // Добавляем в разметку
+}
+
 function renderPhoto(photo) {
   const photoCard = new Card(photo.name, photo.link, ".photo-template"); // Создаем карточку
 
-  photoList.prepend(photoCard.createCard()); // Добавляем в разметку
+  addCardToCardlist(photoCard.createCard()); // Добавляем в разметку
 }
 
 function openPropfilePopup() {
@@ -119,37 +104,24 @@ function openPropfilePopup() {
   nameEdit.value = profileName.textContent;
   aboutEdit.value = profileAbout.textContent;
 
-  nameEdit.classList.remove("form__text_invalid");
-  aboutEdit.classList.remove("form__text_invalid");
-
-  nameError.textContent = "";
-  aboutError.textContent = "";
-
-  buttonFormEdit.classList.remove("form__btn_disabled");
-  buttonFormEdit.removeAttribute("disabled", "");
+  formValidatorEdit.resetErrors(inputListEdit);
+  formValidatorEdit.removeButtonDisabled();
 
   openPopup(popupEdit);
 }
 
 function openAddPhotoPopup() {
   // Очищаем поля ввода
-  titleAdd.value = "";
-  linkAdd.value = "";
+  formElementAddPhoto.reset();
 
-  titleAdd.classList.remove("form__text_invalid");
-  linkAdd.classList.remove("form__text_invalid");
-
-  titleError.textContent = "";
-  linkError.textContent = "";
-
-  buttonFormAddPhoto.classList.add("form__btn_disabled");
-  buttonFormAddPhoto.setAttribute("disabled", "");
+  formValidatorAddPhoto.resetErrors(inputListAddPhoto);
+  formValidatorAddPhoto.addButtonDisabled();
 
   openPopup(popupAddPhoto);
 }
 
 // Обработчик «отправки» формы добавления карточки
-function formSubmitHandlerCreate(event) {
+function handleAddCardFormSubmit(event) {
   // Создаем объект с введенной информацией
   const photo = {
     name: titleAdd.value,
@@ -162,7 +134,7 @@ function formSubmitHandlerCreate(event) {
 }
 
 // Обработчик «отправки» формы редактирования
-function formSubmitHandlerEdit(event) {
+function handleProfileEditFormSubmit(event) {
   // Получаем значение полей nameEdit и aboutEdit из свойства value
   const newName = nameEdit.value;
   const newAbout = aboutEdit.value;
@@ -176,7 +148,7 @@ function formSubmitHandlerEdit(event) {
 
 photos.forEach(renderPhoto); // Запускаем рендеринг фотографий на страницу
 
-formElementEdit.addEventListener("submit", formSubmitHandlerEdit); // Прикрепляем обработчик к форме редактирования
+formElementEdit.addEventListener("submit", handleProfileEditFormSubmit); // Прикрепляем обработчик к форме редактирования
 
 //Открываем попап редактирования профиля
 buttonEdit.addEventListener("click", openPropfilePopup);
@@ -188,7 +160,7 @@ btnCloseEdit.addEventListener("click", () => {
 
 popupEdit.addEventListener("click", closePopupOverlay); // Закрываем попап редактирования при клике на оверлей
 
-formElementAddPhoto.addEventListener("submit", formSubmitHandlerCreate); // Прикрепляем обработчик к форме добавления фотографии
+formElementAddPhoto.addEventListener("submit", handleAddCardFormSubmit); // Прикрепляем обработчик к форме добавления фотографии
 
 // Открываем попап добавления фотографии
 buttonAdd.addEventListener("click", openAddPhotoPopup);
@@ -206,14 +178,6 @@ btnClosePicture.addEventListener("click", () => {
 });
 
 popupPicture.addEventListener("click", closePopupOverlay); // Закрываем попап просмотра фотографии при клике на оверлей
-
-// Элементы форм
-const formElements = {
-  inputSelector: ".form__text",
-  submitButtonSelector: ".form__btn",
-  inactiveButtonClass: "form__btn_disabled",
-  inputErrorClass: "form__text_invalid",
-};
 
 // Подключаем валидацию ко всем формам на странице
 formList.forEach((formElement) => {

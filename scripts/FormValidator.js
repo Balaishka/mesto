@@ -39,15 +39,31 @@ export class FormValidator {
   };
 
   // Активируем и дизактивируем кнопку отправки формы
-  _toggleButtonDisabled = (inputList, buttonElement) => {
+  _toggleButtonDisabled = (inputList) => {
     // Проверяем инпуты на валидность
     if (this._hasInvalidInput(inputList)) {
-      buttonElement.classList.add(this._form.inactiveButtonClass);
-      buttonElement.setAttribute("disabled", "");
+      this.addButtonDisabled();
     } else {
-      buttonElement.classList.remove(this._form.inactiveButtonClass);
-      buttonElement.removeAttribute("disabled");
+      this.removeButtonDisabled();
     }
+  };
+
+  addButtonDisabled = () => {
+    const button = this._formElement.querySelector(
+      this._form.submitButtonSelector
+    );
+
+    button.classList.add(this._form.inactiveButtonClass);
+    button.setAttribute("disabled", "");
+  };
+
+  removeButtonDisabled = () => {
+    const button = this._formElement.querySelector(
+      this._form.submitButtonSelector
+    );
+
+    button.classList.remove(this._form.inactiveButtonClass);
+    button.removeAttribute("disabled");
   };
 
   // Прикрепление обработчика к инпутам
@@ -56,16 +72,19 @@ export class FormValidator {
       this._formElement.querySelectorAll(this._form.inputSelector)
     );
 
-    const buttonElement = this._formElement.querySelector(
-      this._form.submitButtonSelector
-    ); //Кнопка формы
-    this._toggleButtonDisabled(inputList, buttonElement);
+    this._toggleButtonDisabled(inputList);
 
     inputList.forEach((input) => {
       input.addEventListener("input", () => {
-        this._toggleButtonDisabled(inputList, buttonElement);
+        this._toggleButtonDisabled(inputList);
         this._checkValid(input);
       });
+    });
+  };
+
+  resetErrors = (inputList) => {
+    inputList.forEach((input) => {
+      this._hideInputError(input);
     });
   };
 
