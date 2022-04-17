@@ -1,5 +1,7 @@
 import { Card } from "./Card.js";
 
+import { FormValidator } from "./FormValidator.js";
+
 const photos = [
   {
     name: "Архыз",
@@ -314,17 +316,21 @@ enableValidation({
 });
 
 // Включаем валидацию формы добавления фото
-enableValidation({
+/*enableValidation({
   formSelector: ".form_add-photo",
   inputSelector: ".form__text",
   submitButtonSelector: ".form__btn",
   inactiveButtonClass: "form__btn_disabled",
   inputErrorClass: "form__text_invalid",
-});
+});*/
 
+const objFormElements = {
+  inputSelector: ".form__text",
+  submitButtonSelector: ".form__btn",
+  inactiveButtonClass: "form__btn_disabled",
+  inputErrorClass: "form__text_invalid",
+};
 
+new FormValidator(objFormElements, formElementAddPhoto).enableValidation();
 
-
-/*const cardTest = new Card('имя', 'https://luminofor.ru/images/product_images/popup_images/968_0.jpg', '.photo-template');
-
-cardTest.createCard();*/
+export {toggleButtonDisabled, checkValid};
