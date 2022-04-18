@@ -53,9 +53,6 @@ const formElements = {
   inputErrorClass: "form__text_invalid",
 };
 
-const inputListEdit = formElementEdit.querySelectorAll(".form__text"); // Находим текстовые поля в форме профиля
-const inputListAddPhoto = formElementAddPhoto.querySelectorAll(".form__text"); // Находим текстовые поля в форме добавления фото
-
 const formValidatorEdit = new FormValidator(formElements, formElementEdit); // Создаем класс формы редактирования
 
 const formValidatorAddPhoto = new FormValidator(
@@ -89,14 +86,14 @@ function openPopup(popup) {
   document.addEventListener("keydown", closePopupEsc);
 }
 
-function addCardToCardlist(photo) {
-  photoList.prepend(photo); // Добавляем в разметку
+function addCardToCardlist(photoCard) {
+  photoList.prepend(photoCard); // Добавляем в разметку
 }
 
 function renderPhoto(photo) {
-  const photoCard = new Card(photo.name, photo.link, ".photo-template"); // Создаем карточку
+  const photoCard = new Card(photo.name, photo.link, ".photo-template").createCard(); // Создаем карточку
 
-  addCardToCardlist(photoCard.createCard()); // Добавляем в разметку
+  return photoCard;
 }
 
 function openPropfilePopup() {
@@ -104,7 +101,7 @@ function openPropfilePopup() {
   nameEdit.value = profileName.textContent;
   aboutEdit.value = profileAbout.textContent;
 
-  formValidatorEdit.resetErrors(inputListEdit);
+  formValidatorEdit.resetErrors();
   formValidatorEdit.removeButtonDisabled();
 
   openPopup(popupEdit);
@@ -114,7 +111,7 @@ function openAddPhotoPopup() {
   // Очищаем поля ввода
   formElementAddPhoto.reset();
 
-  formValidatorAddPhoto.resetErrors(inputListAddPhoto);
+  formValidatorAddPhoto.resetErrors();
   formValidatorAddPhoto.addButtonDisabled();
 
   openPopup(popupAddPhoto);
@@ -128,7 +125,8 @@ function handleAddCardFormSubmit(event) {
     link: linkAdd.value,
   };
 
-  renderPhoto(photo); // Формируем карточку
+  const photoCard = renderPhoto(photo); // Формируем карточку
+  addCardToCardlist(photoCard); // Добавляем в разметку
 
   closePopup(popupAddPhoto); //Закрываем попап
 }
@@ -146,7 +144,13 @@ function handleProfileEditFormSubmit(event) {
   closePopup(popupEdit);
 }
 
-photos.forEach(renderPhoto); // Запускаем рендеринг фотографий на страницу
+// Запускаем рендеринг фотографий на страницу
+photos.forEach((item) => {
+
+  const photoCard = renderPhoto(item); // Формируем карточку
+  addCardToCardlist(photoCard); // Добавляем в разметку
+
+});
 
 formElementEdit.addEventListener("submit", handleProfileEditFormSubmit); // Прикрепляем обработчик к форме редактирования
 
