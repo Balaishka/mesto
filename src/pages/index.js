@@ -6,6 +6,8 @@ import { FormValidator } from "../components/FormValidator.js";
 
 import { Section } from "../components/Section.js";
 
+import { Popup } from "../components/Popup.js";
+
 import * as constants from "../utils/constants.js";
 
 // Находим нужные кнопки и блоки профиля
