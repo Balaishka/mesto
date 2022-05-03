@@ -1,10 +1,10 @@
 import '../pages/index.css';
 
-import { Card } from "./Card.js";
+import { Card } from "../components/Card.js";
 
-import { FormValidator } from "./FormValidator.js";
+import { FormValidator } from "../components/FormValidator.js";
 
-import { photos } from "./cards.js";
+import { photos } from "../utils/cards.js";
 
 // Находим нужные кнопки и блоки профиля
 const page = document.querySelector(".page");
