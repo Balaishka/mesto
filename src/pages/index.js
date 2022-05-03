@@ -4,7 +4,9 @@ import { Card } from "../components/Card.js";
 
 import { FormValidator } from "../components/FormValidator.js";
 
-import { photos } from "../utils/cards.js";
+import { Section } from "../components/Section.js";
+
+import * as constants from "../utils/constants.js";
 
 // Находим нужные кнопки и блоки профиля
 const page = document.querySelector(".page");
@@ -21,7 +23,6 @@ const nameEdit = formElementEdit.querySelector(".form__text_type_name");
 const aboutEdit = formElementEdit.querySelector(".form__text_type_about");
 
 // Находим нужные кнопки и значения фотографий
-const photoList = document.querySelector(".photos__list");
 const popupAddPhoto = document.querySelector(".popup_name_add-photo");
 const popupPicture = document.querySelector(".popup_name_picture");
 const buttonAdd = document.querySelector(".profile__add-btn");
@@ -62,6 +63,15 @@ const formValidatorAddPhoto = new FormValidator(
   formElementAddPhoto
 ); // Создаем класс формы добавления фото
 
+// Формируем карточки
+const cardsList = new Section({
+  items: constants.photos,
+  renderer: (item) => {
+    const photoCard = new Card(item.name, item.link, ".photo-template").createCard(); // Создаем карточку
+    cardsList.addItem(photoCard);
+  }
+}, '.photos__list');
+
 function closePopup(popup) {
   popup.classList.remove("popup_opened");
 
@@ -86,10 +96,6 @@ function openPopup(popup) {
   popup.classList.add("popup_opened");
 
   document.addEventListener("keydown", closePopupEsc);
-}
-
-function addCardToCardlist(photoCard) {
-  photoList.prepend(photoCard); // Добавляем в разметку
 }
 
 function renderPhoto(photo) {
@@ -128,7 +134,7 @@ function handleAddCardFormSubmit(event) {
   };
 
   const photoCard = renderPhoto(photo); // Формируем карточку
-  addCardToCardlist(photoCard); // Добавляем в разметку
+  cardsList.addItem(photoCard); // Добавляем в разметку
 
   closePopup(popupAddPhoto); //Закрываем попап
 }
@@ -146,13 +152,7 @@ function handleProfileEditFormSubmit(event) {
   closePopup(popupEdit);
 }
 
-// Запускаем рендеринг фотографий на страницу
-photos.forEach((item) => {
-
-  const photoCard = renderPhoto(item); // Формируем карточку
-  addCardToCardlist(photoCard); // Добавляем в разметку
-
-});
+cardsList.renderItems();//запускаем рендеринг фотографий
 
 formElementEdit.addEventListener("submit", handleProfileEditFormSubmit); // Прикрепляем обработчик к форме редактирования
 
