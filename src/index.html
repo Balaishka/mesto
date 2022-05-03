@@ -4,19 +4,18 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Место</title>
-    <link rel="stylesheet" href="./pages/index.css" />
   </head>
   <body>
     <div class="page">
       <header class="header">
-        <img src="./images/logo.svg" alt="Логотип" class="header__logo" />
+        <img src="<%=require('./images/logo.svg')%>" alt="Логотип" class="header__logo" />
       </header>
 
       <main class="content">
         <section class="content__block profile">
           <div class="profile__info">
             <img
-              src="./images/avatar.png"
+              src="<%=require('./images/avatar.png')%>"
               alt="Аватар"
               class="profile__avatar"
             />
@@ -160,10 +159,5 @@
         ></button>
       </li>
     </template>
-
-    <script type="module" src="./scripts/index.js"></script>
-    <script type="module" src="./scripts/Card.js"></script>
-    <script type="module" src="./scripts/FormValidator.js"></script>
-    <script type="module" src="./scripts/cards.js"></script>
   </body>
 </html>
