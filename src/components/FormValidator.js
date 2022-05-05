@@ -3,8 +3,12 @@ export class FormValidator {
     this._form = form;
     this._formElement = formElement;
 
-    this._inputList = Array.from(this._formElement.querySelectorAll(this._form.inputSelector));
-    this._button = this._formElement.querySelector(this._form.submitButtonSelector);
+    this._inputList = Array.from(
+      this._formElement.querySelectorAll(this._form.inputSelector)
+    );
+    this._button = this._formElement.querySelector(
+      this._form.submitButtonSelector
+    );
   }
 
   // Показываем текст ошибки

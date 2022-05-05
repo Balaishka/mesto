@@ -1,10 +1,9 @@
-import { pictureTitle, pictureImg, popupPicture, openPopup } from "../pages/index.js";
-
 export class Card {
-  constructor(name, image, cardSelector) {
+  constructor(name, image, cardSelector, { handleCardClick }) {
     this._name = name;
     this._image = image;
     this._cardSelector = cardSelector;
+    this._handleCardClick = handleCardClick;
   }
 
   // Создаем клон темплейта карточки
@@ -30,12 +29,7 @@ export class Card {
 
   // Открываем попап с фотографией
   _openPhoto = (cardElement) => {
-    pictureTitle.textContent =
-      cardElement.querySelector(".photo__name").textContent;
-    pictureImg.src = cardElement.querySelector(".photo__img").src;
-    pictureImg.alt = cardElement.querySelector(".photo__img").alt;
-
-    openPopup(popupPicture);
+    this._handleCardClick(cardElement);
   };
 
   // Подключаем обработчики событий

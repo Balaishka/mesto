@@ -24,3 +24,20 @@ export const photos = [
     link: "https://pictures.s3.yandex.net/frontend-developer/cards-compressed/baikal.jpg",
   },
 ];
+
+export const buttonEdit = document.querySelector(".profile__edit-btn");
+export const buttonAddPhoto = document.querySelector(".profile__add-btn");
+
+export const formElementEdit = document.querySelector(".form_edit");
+export const formElementAddPhoto = document.querySelector(".form_add-photo");
+
+// Находим все формы на странице
+export const formList = Array.from(document.querySelectorAll(".form"));
+
+// Элементы форм
+export const formElements = {
+  inputSelector: ".form__text",
+  submitButtonSelector: ".form__btn",
+  inactiveButtonClass: "form__btn_disabled",
+  inputErrorClass: "form__text_invalid",
+};
