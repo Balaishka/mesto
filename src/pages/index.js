@@ -19,7 +19,8 @@ import {
   formElements,
   formElementEdit,
   formElementAddPhoto,
-  formList,
+  userName,
+  userAbout
 } from "../utils/constants.js";
 
 // Создаем класс формы редактирования
@@ -42,9 +43,9 @@ const cardsList = new Section(
   {
     items: photos,
     renderer: (item) => {
-      const photoCard = new Card(item.name, item.link, ".photo-template", {
+      const photoCard = new Card(item["add-photo-title"], item['add-photo-link'], ".photo-template", {
         handleCardClick: () => {
-          popupWithImage.open(photoCard);
+          popupWithImage.open(item['add-photo-title'], item['add-photo-link']);
         },
       }).createCard(); // Создаем карточку
       cardsList.addItem(photoCard);
@@ -55,33 +56,16 @@ const cardsList = new Section(
 
 // Попап добавления карточки
 const popupAddPhoto = new PopupWithForm(".popup_name_add-photo", {
-  submit: () => {
-    // Создаем объект с введенной информацией
-    const photo = {
-      name: popupAddPhoto._selector.querySelector(".form__text_type_title")
-        .value,
-      link: popupAddPhoto._selector.querySelector(".form__text_type_link")
-        .value,
-    };
-
-    cardsList.renderer(photo); //Создаем карточку и добавляем в разметку
-
+  submit: (inputsData) => {
+    cardsList.renderer(inputsData); //Создаем карточку и добавляем в разметку
     popupAddPhoto.close();
   },
 });
 
 // Попап редактирования профиля
 const popupEdit = new PopupWithForm(".popup_name_edit", {
-  submit: () => {
-    const newName = popupEdit._selector.querySelector(
-      ".form__text_type_name"
-    ).value;
-    const newAbout = popupEdit._selector.querySelector(
-      ".form__text_type_about"
-    ).value;
-
-    userInfo.setUserInfo(newName, newAbout);
-
+  submit: (inputsData) => {
+    userInfo.setUserInfo(inputsData);
     popupEdit.close();
   },
 });
@@ -101,9 +85,8 @@ function openAddPhotoPopup() {
 function openEdit() {
   const info = userInfo.getUserInfo();
 
-  popupEdit._selector.querySelector(".form__text_type_name").value = info.name;
-  popupEdit._selector.querySelector(".form__text_type_about").value =
-    info.about;
+  userName.value = info.name;
+  userAbout.value = info.about;
 
   formValidatorEdit.resetErrors();
   formValidatorEdit.removeButtonDisabled();
@@ -112,9 +95,8 @@ function openEdit() {
 }
 
 // Подключаем валидацию ко всем формам на странице
-formList.forEach((formElement) => {
-  new FormValidator(formElements, formElement).enableValidation();
-});
+formValidatorEdit.enableValidation();
+formValidatorAddPhoto.enableValidation();
 
 // Подключаем обработчики событий к попапам
 popupAddPhoto.setEventListeners();

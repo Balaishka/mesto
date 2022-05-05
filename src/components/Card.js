@@ -8,59 +8,59 @@ export class Card {
 
   // Создаем клон темплейта карточки
   _getTemplate = () => {
-    const cardElement = document
+    this._cardElement = document
       .querySelector(this._cardSelector)
       .content.firstElementChild.cloneNode(true);
 
-    return cardElement;
+    return this._cardElement;
   };
 
   // Удаляем карточку
-  _deleteCard = (cardElement) => {
-    cardElement.remove();
+  _deleteCard = () => {
+    this._cardElement.remove();
   };
 
   // Лайк
-  _likeCard = (cardElement) => {
-    cardElement
+  _likeCard = () => {
+    this._cardElement
       .querySelector(".photo__like-btn")
       .classList.toggle("photo__like-btn_active");
   };
 
   // Открываем попап с фотографией
-  _openPhoto = (cardElement) => {
-    this._handleCardClick(cardElement);
+  _openPhoto = () => {
+    this._handleCardClick();
   };
 
   // Подключаем обработчики событий
-  _setEventListeners = (cardElement) => {
-    cardElement
+  _setEventListeners = () => {
+    this._cardElement
       .querySelector(".photo__delete-btn")
       .addEventListener("click", () => {
-        this._deleteCard(cardElement);
+        this._deleteCard();
       });
 
-    cardElement
+    this._cardElement
       .querySelector(".photo__like-btn")
       .addEventListener("click", () => {
-        this._likeCard(cardElement);
+        this._likeCard();
       });
 
-    cardElement.querySelector(".photo__img").addEventListener("click", () => {
-      this._openPhoto(cardElement);
+    this._cardElement.querySelector(".photo__img").addEventListener("click", () => {
+      this._openPhoto();
     });
   };
 
   // Создаем карточку
   createCard() {
-    const cardElement = this._getTemplate();
+    this._getTemplate();
 
-    cardElement.querySelector(".photo__name").textContent = this._name;
-    cardElement.querySelector(".photo__img").src = this._image;
-    cardElement.querySelector(".photo__img").alt = this._name;
+    this._cardElement.querySelector(".photo__name").textContent = this._name;
+    this._cardElement.querySelector(".photo__img").src = this._image;
+    this._cardElement.querySelector(".photo__img").alt = this._name;
 
-    this._setEventListeners(cardElement);
+    this._setEventListeners();
 
-    return cardElement;
+    return this._cardElement;
   }
 }

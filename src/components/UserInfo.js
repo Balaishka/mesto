@@ -11,8 +11,8 @@ export class UserInfo {
     };
   }
 
-  setUserInfo(name, about) {
-    this._selectorName.textContent = name;
-    this._selectorAbout.textContent = about;
+  setUserInfo(inputsData) {
+    this._selectorName.textContent = inputsData['edit-name'];
+    this._selectorAbout.textContent = inputsData['edit-about'];
   }
 }
