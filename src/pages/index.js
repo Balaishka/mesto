@@ -43,9 +43,15 @@ const cardsList = new Section(
   {
     items: photos,
     renderer: (item) => {
-      const photoCard = new Card(item["add-photo-title"], item['add-photo-link'], ".photo-template", {
+      const photoCard = new Card({
+        name: item.name, 
+        image: item.link
+      }, ".photo-template", {
         handleCardClick: () => {
-          popupWithImage.open(item['add-photo-title'], item['add-photo-link']);
+          popupWithImage.open({
+            name: item.name,
+            link: item.link
+          });
         },
       }).createCard(); // Создаем карточку
       cardsList.addItem(photoCard);
@@ -57,7 +63,11 @@ const cardsList = new Section(
 // Попап добавления карточки
 const popupAddPhoto = new PopupWithForm(".popup_name_add-photo", {
   submit: (inputsData) => {
-    cardsList.renderer(inputsData); //Создаем карточку и добавляем в разметку
+    const photo = {
+      name: inputsData['add-photo-title'],
+      link: inputsData['add-photo-link']
+    };
+    cardsList.renderer(photo); //Создаем карточку и добавляем в разметку
     popupAddPhoto.close();
   },
 });

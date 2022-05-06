@@ -1,5 +1,5 @@
 export class Card {
-  constructor(name, image, cardSelector, { handleCardClick }) {
+  constructor({ name, image }, cardSelector, { handleCardClick }) {
     this._name = name;
     this._image = image;
     this._cardSelector = cardSelector;
