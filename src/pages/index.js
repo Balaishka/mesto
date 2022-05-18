@@ -12,6 +12,8 @@ import { PopupWithForm } from "../components/PopupWithForm.js";
 
 import { UserInfo } from "../components/UserInfo.js";
 
+import { Api } from "../components/Api.js";
+
 import {
   photos,
   buttonEdit,
@@ -22,6 +24,27 @@ import {
   userName,
   userAbout
 } from "../utils/constants.js";
+
+// Создаем класс апи
+/*const api = new Api({
+  url: 'https://mesto.nomoreparties.co/v1/cohort-41/cards',
+  headers: {
+    //"content-type": "application/json"
+    "authorization": "fc4c8120-00e8-40b3-bbab-d69ed1e171f6"
+  }
+});*/
+
+const api = new Api({
+  url: 'https://nomoreparties.co/v1/cohort-41/users/me',
+  headers: {
+    "authorization": "fc4c8120-00e8-40b3-bbab-d69ed1e171f6"
+  }
+});
+
+api.getData()
+.then((data) => {
+  console.log(data.name);
+});
 
 // Создаем класс формы редактирования
 const formValidatorEdit = new FormValidator(formElements, formElementEdit);
