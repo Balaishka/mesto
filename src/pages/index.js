@@ -25,26 +25,96 @@ import {
   userAbout
 } from "../utils/constants.js";
 
-// Создаем класс апи
-/*const api = new Api({
-  url: 'https://mesto.nomoreparties.co/v1/cohort-41/cards',
-  headers: {
-    //"content-type": "application/json"
-    "authorization": "fc4c8120-00e8-40b3-bbab-d69ed1e171f6"
-  }
-});*/
 
+
+
+
+
+
+
+
+
+
+// Создаем класс апи дл карточек
 const api = new Api({
-  url: 'https://nomoreparties.co/v1/cohort-41/users/me',
+  baseUrl: 'https://mesto.nomoreparties.co/v1/cohort-41/',
   headers: {
+    "content-type": "application/json",
     "authorization": "fc4c8120-00e8-40b3-bbab-d69ed1e171f6"
   }
 });
 
-api.getData()
-.then((data) => {
-  console.log(data.name);
+api.getAllCards()
+  .then((dataArr) => {
+    // Формируем карточки
+    const cardsList = new Section(
+      {
+        items: dataArr,
+          
+        renderer: (item) => {
+          const photoCard = new Card({
+            data: {
+              name: item.name, 
+              link: item.link,
+              likes: item.likes,
+              id: item._id
+            },
+            handleCardClick: () => {
+              popupWithImage.open({
+                name: item.name,
+                link: item.link
+              });
+            },
+            handleLikeClick: (card) => {
+              card.querySelector(".photo__like-btn")
+              .classList.toggle("photo__like-btn_active");
+              console.log(card.id);
+            },
+            handleDeleteIconClick: (card) => {
+              card.remove();
+            }
+          }, ".photo-template")
+          .createCard(); // Создаем карточку
+
+          cardsList.addItem(photoCard);
+        },
+      },
+      ".photos__list"
+    );
+
+    cardsList.renderItems();
+  });
+
+
+
+
+
+
+// Попап добавления карточки
+const popupAddPhoto = new PopupWithForm(".popup_name_add-photo", {
+  submit: (inputsData) => {
+    const photo = {
+      name: inputsData['add-photo-title'],
+      link: inputsData['add-photo-link']
+    };
+    cardsList.renderer(photo); //Создаем карточку и добавляем в разметку
+    popupAddPhoto.close();
+  },
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // Создаем класс формы редактирования
 const formValidatorEdit = new FormValidator(formElements, formElementEdit);
@@ -59,40 +129,6 @@ const formValidatorAddPhoto = new FormValidator(
 const userInfo = new UserInfo({
   selectorName: ".profile__name",
   selectorAbout: ".profile__about",
-});
-
-// Формируем карточки
-const cardsList = new Section(
-  {
-    items: photos,
-    renderer: (item) => {
-      const photoCard = new Card({
-        name: item.name, 
-        image: item.link
-      }, ".photo-template", {
-        handleCardClick: () => {
-          popupWithImage.open({
-            name: item.name,
-            link: item.link
-          });
-        },
-      }).createCard(); // Создаем карточку
-      cardsList.addItem(photoCard);
-    },
-  },
-  ".photos__list"
-);
-
-// Попап добавления карточки
-const popupAddPhoto = new PopupWithForm(".popup_name_add-photo", {
-  submit: (inputsData) => {
-    const photo = {
-      name: inputsData['add-photo-title'],
-      link: inputsData['add-photo-link']
-    };
-    cardsList.renderer(photo); //Создаем карточку и добавляем в разметку
-    popupAddPhoto.close();
-  },
 });
 
 // Попап редактирования профиля
@@ -141,6 +177,3 @@ buttonAddPhoto.addEventListener("click", openAddPhotoPopup);
 
 // Подключаем обработчик к кнопке открытия редактирования профиля
 buttonEdit.addEventListener("click", openEdit);
-
-// Запускаем рендеринг фотографий на страницу
-cardsList.renderItems();

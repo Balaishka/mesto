@@ -1,9 +1,15 @@
 export class Card {
-  constructor({ name, image }, cardSelector, { handleCardClick }) {
-    this._name = name;
-    this._image = image;
+  constructor(cardParameters, cardSelector) {
+    this._name = cardParameters.data.name;
+    this._link = cardParameters.data.link;
+    this._likes = cardParameters.data.likes.length;
+    this._id = cardParameters.data.id;
+
+    this._handleCardClick = cardParameters.handleCardClick;
+    this._handleLikeClick = cardParameters.handleLikeClick;
+    this._handleDeleteIconClick = cardParameters.handleDeleteIconClick;
+
     this._cardSelector = cardSelector;
-    this._handleCardClick = handleCardClick;
   }
 
   // Создаем клон темплейта карточки
@@ -17,14 +23,12 @@ export class Card {
 
   // Удаляем карточку
   _deleteCard = () => {
-    this._cardElement.remove();
+    this._handleDeleteIconClick();
   };
 
   // Лайк
-  _likeCard = () => {
-    this._cardElement
-      .querySelector(".photo__like-btn")
-      .classList.toggle("photo__like-btn_active");
+  _likeCard = (card) => {
+    this._handleLikeClick(card);
   };
 
   // Открываем попап с фотографией
@@ -43,10 +47,11 @@ export class Card {
     this._cardElement
       .querySelector(".photo__like-btn")
       .addEventListener("click", () => {
-        this._likeCard();
+        this._likeCard(this._cardElement);
       });
 
-    this._cardElement.querySelector(".photo__img").addEventListener("click", () => {
+    this._cardElement.querySelector(".photo__img")
+    .addEventListener("click", () => {
       this._openPhoto();
     });
   };
@@ -56,8 +61,9 @@ export class Card {
     this._getTemplate();
 
     this._cardElement.querySelector(".photo__name").textContent = this._name;
-    this._cardElement.querySelector(".photo__img").src = this._image;
     this._cardElement.querySelector(".photo__img").alt = this._name;
+    this._cardElement.querySelector(".photo__img").src = this._link;
+    this._cardElement.querySelector(".photo__likes").textContent = this._likes;
 
     this._setEventListeners();
 

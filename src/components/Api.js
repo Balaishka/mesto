@@ -1,12 +1,12 @@
 export class Api {
     constructor(config) {
-        this._url = config.url;
+        this._url = config.baseUrl;
         this._headers = config.headers;
     }
 
-    _createFetch(method) {
-        return fetch(this._url, {
-            method: method,
+    _fetch(way, methodName) {
+        return fetch(`${this._url}${way}`, {
+            method: methodName,
             headers: this._headers
         })
           .then((res) => {
@@ -14,23 +14,11 @@ export class Api {
                   return res.json();
               }
 
-              return Promise.reject('Упс, ошибка');
+              return Promise.reject(`Ошибка: ${res.status}`);
           });
     }
 
-    getData() {
-        return this._createFetch("GET");
-    }
-
-    addData() {
-        return this._createFetch("POST");
-    }
-
-    deleteData() {
-        return this._createFetch("DELETE");
-    }
-
-    patchData() {
-        return this._createFetch("PATCH");
+    getAllCards() {
+        return this._fetch("cards", "GET");
     }
 }
