@@ -24,6 +24,7 @@ import {
   userName,
   userAbout
 } from "../utils/constants.js";
+import { P } from "core-js/modules/_export";
 
 
 
@@ -33,7 +34,7 @@ import {
 
 
 
-
+export const myId = "be83796ca641dbf14cb41351";
 
 // Создаем класс апи дл карточек
 const api = new Api({
@@ -65,18 +66,56 @@ api.getAllCards()
                 link: item.link
               });
             },
-            handleLikeClick: (card) => {
-              card.querySelector(".photo__like-btn")
-              .classList.toggle("photo__like-btn_active");
-              console.log(card.id);
+
+
+
+
+
+
+            handleLikeClick: (card, likeHave) => {
+
+              if (!likeHave) {
+
+                api.addLikeCard(card.id)
+                .then((data) => {
+                  console.log(data.likes);
+                  card.querySelector(".photo__likes").textContent = data.likes.length;
+                  item.likes = data.likes;
+                });
+
+                photoCard.changeLikes(item.likes, true);
+
+              } else {
+
+                api.deleteLikeCard(card.id)
+                .then((data) => {
+                  console.log(data.likes);
+                  card.querySelector(".photo__likes").textContent = data.likes.length;
+                  item.likes = data.likes;
+                });
+
+                photoCard.changeLikes(item.likes, false);
+
+              }
+
             },
+
+
+
+
+
+
+
+
+
             handleDeleteIconClick: (card) => {
               card.remove();
             }
-          }, ".photo-template")
-          .createCard(); // Создаем карточку
+          }, ".photo-template"); // Создаем класс карточки
 
-          cardsList.addItem(photoCard);
+          const newPhotoCard = photoCard.createCard(); // Создаем карточку
+
+          cardsList.addItem(newPhotoCard);
         },
       },
       ".photos__list"

@@ -1,9 +1,11 @@
+import { myId } from "../pages/index.js";
+
 export class Card {
   constructor(cardParameters, cardSelector) {
     this._name = cardParameters.data.name;
     this._link = cardParameters.data.link;
-    this._likes = cardParameters.data.likes.length;
-    this._id = cardParameters.data.id;
+    this._likes = cardParameters.data.likes;
+    this._cardId = cardParameters.data.id;
 
     this._handleCardClick = cardParameters.handleCardClick;
     this._handleLikeClick = cardParameters.handleLikeClick;
@@ -26,10 +28,46 @@ export class Card {
     this._handleDeleteIconClick();
   };
 
+  // Проверка на наличие своего лайка
+  _checkLike = () => {
+    this._likeHave = false;
+
+    this._likes.map((item) => {
+      if (item._id === myId) {
+        this._likeHave = true;
+      }
+    });
+
+    return this._likeHave;
+  }
+
   // Лайк
   _likeCard = (card) => {
-    this._handleLikeClick(card);
+    this._handleLikeClick(card, this._likeHave);
   };
+
+  // Добавление активности кнопки лайка
+  addActiveLikeBtn = () => {
+      this._cardElement.querySelector(".photo__like-btn").classList.add('photo__like-btn_active');
+  }
+
+   // Удаление активности кнопки лайка
+  removeActiveLikeBtn = () => {
+      this._cardElement.querySelector(".photo__like-btn").classList.remove('photo__like-btn_active');
+  }
+
+  // Изменение значения лайков
+  changeLikes = (newLikes, likeHave) => {
+    this._likes = newLikes;
+
+    this._likeHave = likeHave;
+
+    if (this._likeHave) {
+      this.addActiveLikeBtn();
+    } else {
+      this.removeActiveLikeBtn();
+    }
+  }
 
   // Открываем попап с фотографией
   _openPhoto = () => {
@@ -60,10 +98,19 @@ export class Card {
   createCard() {
     this._getTemplate();
 
+    this._cardElement.id = this._cardId;
     this._cardElement.querySelector(".photo__name").textContent = this._name;
     this._cardElement.querySelector(".photo__img").alt = this._name;
     this._cardElement.querySelector(".photo__img").src = this._link;
-    this._cardElement.querySelector(".photo__likes").textContent = this._likes;
+    this._cardElement.querySelector(".photo__likes").textContent = this._likes.length;
+
+    this._checkLike();
+
+    if (this._likeHave) {
+      this.addActiveLikeBtn();
+    } else {
+      this.removeActiveLikeBtn();
+    }
 
     this._setEventListeners();
 

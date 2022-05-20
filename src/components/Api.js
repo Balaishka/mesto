@@ -21,4 +21,16 @@ export class Api {
     getAllCards() {
         return this._fetch("cards", "GET");
     }
+
+    getLikesCard(cardId) {
+        return this._fetch(`cards/${cardId}`, "GET");
+    }
+
+    addLikeCard(cardId) {
+        return this._fetch(`cards/${cardId}/likes`, "PUT");
+    }
+
+    deleteLikeCard(cardId) {
+        return this._fetch(`cards/${cardId}/likes`, "DELETE");
+    }
 }
