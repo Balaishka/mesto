@@ -10,12 +10,13 @@ import { PopupWithImage } from "../components/PopupWithImage.js";
 
 import { PopupWithForm } from "../components/PopupWithForm.js";
 
+import { PopupWithSubmit } from "../components/PopupWithSubmit.js";
+
 import { UserInfo } from "../components/UserInfo.js";
 
 import { Api } from "../components/Api.js";
 
 import {
-  photos,
   buttonEdit,
   buttonAddPhoto,
   formElements,
@@ -24,7 +25,6 @@ import {
   userName,
   userAbout
 } from "../utils/constants.js";
-import { P } from "core-js/modules/_export";
 
 
 
@@ -36,7 +36,7 @@ import { P } from "core-js/modules/_export";
 
 export const myId = "be83796ca641dbf14cb41351";
 
-// Создаем класс апи дл карточек
+// Создаем класс апи для карточек
 const api = new Api({
   baseUrl: 'https://mesto.nomoreparties.co/v1/cohort-41/',
   headers: {
@@ -54,12 +54,15 @@ api.getAllCards()
           
         renderer: (item) => {
           const photoCard = new Card({
+
             data: {
               name: item.name, 
               link: item.link,
               likes: item.likes,
-              id: item._id
+              id: item._id,
+              idOwner: item.owner._id
             },
+
             handleCardClick: () => {
               popupWithImage.open({
                 name: item.name,
@@ -67,18 +70,12 @@ api.getAllCards()
               });
             },
 
-
-
-
-
-
             handleLikeClick: (card, likeHave) => {
 
               if (!likeHave) {
 
                 api.addLikeCard(card.id)
                 .then((data) => {
-                  console.log(data.likes);
                   card.querySelector(".photo__likes").textContent = data.likes.length;
                   item.likes = data.likes;
                 });
@@ -89,7 +86,6 @@ api.getAllCards()
 
                 api.deleteLikeCard(card.id)
                 .then((data) => {
-                  console.log(data.likes);
                   card.querySelector(".photo__likes").textContent = data.likes.length;
                   item.likes = data.likes;
                 });
@@ -100,17 +96,17 @@ api.getAllCards()
 
             },
 
-
-
-
-
-
-
-
-
             handleDeleteIconClick: (card) => {
-              card.remove();
+              popupWithSubmit.open();
+              popupWithSubmit.setEventListeners();
+              
+              if (popupWithSubmit.getVerification) {
+                /*api.deleteCard(card.id).then((data) => {
+                  console.log('Карточка успешно удалена');
+                });*/
+              }
             }
+
           }, ".photo-template"); // Создаем класс карточки
 
           const newPhotoCard = photoCard.createCard(); // Создаем карточку
@@ -122,24 +118,41 @@ api.getAllCards()
     );
 
     cardsList.renderItems();
+
+    return cardsList;
+  })
+  .then((cardsList) => {
+    // Попап добавления карточки
+    const popupAddPhoto = new PopupWithForm(".popup_name_add-photo", {
+      submit: (inputsData) => {
+        
+        api.addNewCard(
+          JSON.stringify({
+            "name": inputsData['add-photo-title'],
+            "link": inputsData['add-photo-link']
+          })
+        )
+        .then((data) => {
+          cardsList.renderer(data); //Создаем карточку и добавляем в разметку
+          popupAddPhoto.close();
+        });
+
+      },
+    });
+
+    popupAddPhoto.setEventListeners();
+
+    // Функция открытия попапа добавления фотографии
+    function openAddPhotoPopup() {
+      formValidatorAddPhoto.resetErrors();
+      formValidatorAddPhoto.addButtonDisabled();
+
+      popupAddPhoto.open();
+    }
+
+    // Подключаем обработчик к кнопке открытия добавления фото
+    buttonAddPhoto.addEventListener("click", openAddPhotoPopup);
   });
-
-
-
-
-
-
-// Попап добавления карточки
-const popupAddPhoto = new PopupWithForm(".popup_name_add-photo", {
-  submit: (inputsData) => {
-    const photo = {
-      name: inputsData['add-photo-title'],
-      link: inputsData['add-photo-link']
-    };
-    cardsList.renderer(photo); //Создаем карточку и добавляем в разметку
-    popupAddPhoto.close();
-  },
-});
 
 
 
@@ -181,13 +194,8 @@ const popupEdit = new PopupWithForm(".popup_name_edit", {
 // Попап просмотра фотографии
 const popupWithImage = new PopupWithImage(".popup_name_picture");
 
-// Функция открытия попапа добавления фотографии
-function openAddPhotoPopup() {
-  formValidatorAddPhoto.resetErrors();
-  formValidatorAddPhoto.addButtonDisabled();
-
-  popupAddPhoto.open();
-}
+// Попап подтверждения удаления
+const popupWithSubmit = new PopupWithSubmit(".popup_name_delete-photo");
 
 // Функция открытия попапа редактирования профиля
 function openEdit() {
@@ -207,12 +215,10 @@ formValidatorEdit.enableValidation();
 formValidatorAddPhoto.enableValidation();
 
 // Подключаем обработчики событий к попапам
-popupAddPhoto.setEventListeners();
+//popupAddPhoto.setEventListeners();
 popupEdit.setEventListeners();
 popupWithImage.setEventListeners();
-
-// Подключаем обработчик к кнопке открытия добавления фото
-buttonAddPhoto.addEventListener("click", openAddPhotoPopup);
+//popupWithSubmit.setEventListeners();
 
 // Подключаем обработчик к кнопке открытия редактирования профиля
 buttonEdit.addEventListener("click", openEdit);

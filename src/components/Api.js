@@ -18,6 +18,21 @@ export class Api {
           });
     }
 
+    _fetchWithBody(way, methodName, bodyContent) {
+        return fetch(`${this._url}${way}`, {
+            method: methodName,
+            headers: this._headers,
+            body: bodyContent
+        })
+          .then((res) => {
+              if (res.ok) {
+                  return res.json();
+              }
+
+              return Promise.reject(`Ошибка: ${res.status}`);
+          });
+    }
+
     getAllCards() {
         return this._fetch("cards", "GET");
     }
@@ -32,5 +47,13 @@ export class Api {
 
     deleteLikeCard(cardId) {
         return this._fetch(`cards/${cardId}/likes`, "DELETE");
+    }
+
+    addNewCard(newCard) {
+        return this._fetchWithBody("cards", "POST", newCard);
+    }
+
+    deleteCard(cardId) {
+        return this._fetch(`cards/${cardId}`, "DELETE");
     }
 }

@@ -50,3 +50,4 @@
 @import url(../blocks/form/__text-error/form__text-error.css);
 @import url(../blocks/form/__btn/form__btn.css);
 @import url(../blocks/form/__btn/_disabled/form__btn_disabled.css);
+@import url(../blocks/form/__btn/_type_delete_photo/form__btn_type_delete_photo.css);

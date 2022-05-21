@@ -6,6 +6,7 @@ export class Card {
     this._link = cardParameters.data.link;
     this._likes = cardParameters.data.likes;
     this._cardId = cardParameters.data.id;
+    this._ownerId = cardParameters.data.idOwner;
 
     this._handleCardClick = cardParameters.handleCardClick;
     this._handleLikeClick = cardParameters.handleLikeClick;
@@ -25,7 +26,11 @@ export class Card {
 
   // Удаляем карточку
   _deleteCard = () => {
-    this._handleDeleteIconClick();
+    this._handleDeleteIconClick(this._cardElement);
+  };
+
+  _checkOwnerCard = () => {
+    this._myCard = false;
   };
 
   // Проверка на наличие своего лайка
@@ -39,7 +44,7 @@ export class Card {
     });
 
     return this._likeHave;
-  }
+  };
 
   // Лайк
   _likeCard = (card) => {
@@ -48,13 +53,17 @@ export class Card {
 
   // Добавление активности кнопки лайка
   addActiveLikeBtn = () => {
-      this._cardElement.querySelector(".photo__like-btn").classList.add('photo__like-btn_active');
-  }
+    this._cardElement
+      .querySelector(".photo__like-btn")
+      .classList.add("photo__like-btn_active");
+  };
 
-   // Удаление активности кнопки лайка
+  // Удаление активности кнопки лайка
   removeActiveLikeBtn = () => {
-      this._cardElement.querySelector(".photo__like-btn").classList.remove('photo__like-btn_active');
-  }
+    this._cardElement
+      .querySelector(".photo__like-btn")
+      .classList.remove("photo__like-btn_active");
+  };
 
   // Изменение значения лайков
   changeLikes = (newLikes, likeHave) => {
@@ -67,7 +76,7 @@ export class Card {
     } else {
       this.removeActiveLikeBtn();
     }
-  }
+  };
 
   // Открываем попап с фотографией
   _openPhoto = () => {
@@ -76,11 +85,16 @@ export class Card {
 
   // Подключаем обработчики событий
   _setEventListeners = () => {
-    this._cardElement
-      .querySelector(".photo__delete-btn")
-      .addEventListener("click", () => {
-        this._deleteCard();
-      });
+
+    if (this._ownerId !== myId) {
+      this._cardElement.querySelector(".photo__delete-btn").remove();
+    } else {
+      this._cardElement
+        .querySelector(".photo__delete-btn")
+        .addEventListener("click", () => {
+          this._deleteCard(this._cardElement);
+        });
+    }
 
     this._cardElement
       .querySelector(".photo__like-btn")
@@ -88,10 +102,11 @@ export class Card {
         this._likeCard(this._cardElement);
       });
 
-    this._cardElement.querySelector(".photo__img")
-    .addEventListener("click", () => {
-      this._openPhoto();
-    });
+    this._cardElement
+      .querySelector(".photo__img")
+      .addEventListener("click", () => {
+        this._openPhoto();
+      });
   };
 
   // Создаем карточку
