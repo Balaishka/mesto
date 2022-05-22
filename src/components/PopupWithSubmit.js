@@ -1,22 +1,23 @@
 import { Popup } from "./Popup.js";
 
 export class PopupWithSubmit extends Popup {
-    constructor(selector) {
-        super(selector);
+  constructor(selector, { handleFormSubmit }) {
+    super(selector);
 
-        this.verification = false;
-    }
+    this._handleFormSubmit = handleFormSubmit;
+  }
 
-    getVerification() {
-        return this.verification;
-    }
+  open(card) {
+    super.open();
+    this._card = card;
+  }
 
-    setEventListeners() {
-        super.setEventListeners();
+  setEventListeners() {
+    super.setEventListeners();
 
-        this._popup.querySelector(".form").addEventListener("submit", (event) => {
-            event.preventDefault();
-            this.verification = true;
-        });
-    }
+    this._popup.querySelector(".form").addEventListener("submit", (event) => {
+      event.preventDefault();
+      this._handleFormSubmit(this._card);
+    });
+  }
 }

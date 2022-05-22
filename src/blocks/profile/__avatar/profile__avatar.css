@@ -3,6 +3,8 @@
   height: 120px;
   margin: 42px 0 26px;
   width: 120px;
+  cursor: pointer;
+  position: relative;
 }
 
 @media screen and (min-width:768px) {

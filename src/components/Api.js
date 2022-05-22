@@ -1,59 +1,85 @@
 export class Api {
-    constructor(config) {
-        this._url = config.baseUrl;
-        this._headers = config.headers;
-    }
+  constructor({ baseUrl, headers }) {
+    this._url = baseUrl;
+    this._headers = headers;
+  }
 
-    _fetch(way, methodName) {
-        return fetch(`${this._url}${way}`, {
-            method: methodName,
-            headers: this._headers
-        })
-          .then((res) => {
-              if (res.ok) {
-                  return res.json();
-              }
+  // Базовый запрос без тела
+  _fetch(way, methodName) {
+    return fetch(`${this._url}${way}`, {
+      method: methodName,
+      headers: this._headers,
+    }).then((res) => {
+      if (res.ok) {
+        return res.json();
+      }
 
-              return Promise.reject(`Ошибка: ${res.status}`);
-          });
-    }
+      return Promise.reject(`Ошибка: ${res.status}`);
+    });
+  }
 
-    _fetchWithBody(way, methodName, bodyContent) {
-        return fetch(`${this._url}${way}`, {
-            method: methodName,
-            headers: this._headers,
-            body: bodyContent
-        })
-          .then((res) => {
-              if (res.ok) {
-                  return res.json();
-              }
+  // Запрос с телом
+  _fetchWithBody(way, methodName, bodyContent) {
+    return fetch(`${this._url}${way}`, {
+      method: methodName,
+      headers: this._headers,
+      body: JSON.stringify(bodyContent),
+    }).then((res) => {
+      if (res.ok) {
+        return res.json();
+      }
 
-              return Promise.reject(`Ошибка: ${res.status}`);
-          });
-    }
+      return Promise.reject(`Ошибка: ${res.status}`);
+    });
+  }
 
-    getAllCards() {
-        return this._fetch("cards", "GET");
-    }
+  // Получаем массив всех карточек
+  getAllCards() {
+    return this._fetch("cards", "GET");
+  }
 
-    getLikesCard(cardId) {
-        return this._fetch(`cards/${cardId}`, "GET");
-    }
+  // Получаем лайки карточки
+  getLikesCard(cardId) {
+    return this._fetch(`cards/${cardId}`, "GET");
+  }
 
-    addLikeCard(cardId) {
-        return this._fetch(`cards/${cardId}/likes`, "PUT");
-    }
+  // Ставим лайк карточке
+  addLikeCard(cardId) {
+    return this._fetch(`cards/${cardId}/likes`, "PUT");
+  }
 
-    deleteLikeCard(cardId) {
-        return this._fetch(`cards/${cardId}/likes`, "DELETE");
-    }
+  // Убираем лайк с карточки
+  deleteLikeCard(cardId) {
+    return this._fetch(`cards/${cardId}/likes`, "DELETE");
+  }
 
-    addNewCard(newCard) {
-        return this._fetchWithBody("cards", "POST", newCard);
-    }
+  // Добавляем новую карточку
+  addNewCard(newCard) {
+    return this._fetchWithBody("cards", "POST", newCard);
+  }
 
-    deleteCard(cardId) {
-        return this._fetch(`cards/${cardId}`, "DELETE");
-    }
+  // Удаляем свою карточку
+  deleteCard(cardId) {
+    return this._fetch(`cards/${cardId}`, "DELETE");
+  }
+
+  // Получаем всю информацию о пользователе
+  getAllUserInfo() {
+    return this._fetch("users/me", "GET");
+  }
+
+  // Обновляем информацию пользователя
+  setUserInfo(newUserInfo) {
+    return this._fetchWithBody("users/me", "PATCH", newUserInfo);
+  }
+
+  // Обновляем аватар
+  setUserAvatar(newAvatar) {
+    return this._fetchWithBody("users/me/avatar", "PATCH", newAvatar);
+  }
+
+  // Получаем всю необходимую информацию для отрисовки страницы
+  getAllNeededData() {
+    return Promise.all([this.getAllUserInfo(), this.getAllCards()]);
+  }
 }

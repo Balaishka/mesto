@@ -1,5 +1,3 @@
-import { myId } from "../pages/index.js";
-
 export class Card {
   constructor(cardParameters, cardSelector) {
     this._name = cardParameters.data.name;
@@ -7,6 +5,7 @@ export class Card {
     this._likes = cardParameters.data.likes;
     this._cardId = cardParameters.data.id;
     this._ownerId = cardParameters.data.idOwner;
+    this._myId = cardParameters.data.myId;
 
     this._handleCardClick = cardParameters.handleCardClick;
     this._handleLikeClick = cardParameters.handleLikeClick;
@@ -29,6 +28,7 @@ export class Card {
     this._handleDeleteIconClick(this._cardElement);
   };
 
+  // Проверяем, наша ли карточка
   _checkOwnerCard = () => {
     this._myCard = false;
   };
@@ -38,7 +38,7 @@ export class Card {
     this._likeHave = false;
 
     this._likes.map((item) => {
-      if (item._id === myId) {
+      if (item._id === this._myId) {
         this._likeHave = true;
       }
     });
@@ -85,8 +85,7 @@ export class Card {
 
   // Подключаем обработчики событий
   _setEventListeners = () => {
-
-    if (this._ownerId !== myId) {
+    if (this._ownerId !== this._myId) {
       this._cardElement.querySelector(".photo__delete-btn").remove();
     } else {
       this._cardElement
@@ -117,7 +116,8 @@ export class Card {
     this._cardElement.querySelector(".photo__name").textContent = this._name;
     this._cardElement.querySelector(".photo__img").alt = this._name;
     this._cardElement.querySelector(".photo__img").src = this._link;
-    this._cardElement.querySelector(".photo__likes").textContent = this._likes.length;
+    this._cardElement.querySelector(".photo__likes").textContent =
+      this._likes.length;
 
     this._checkLike();
 
