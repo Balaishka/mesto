@@ -20,6 +20,13 @@ export class Card {
       .querySelector(this._cardSelector)
       .content.firstElementChild.cloneNode(true);
 
+    // Находим нужные элементы и записываем их в классовые переменные
+    this._btnLike = this._cardElement.querySelector(".photo__like-btn");
+    this._btnDelete = this._cardElement.querySelector(".photo__delete-btn");
+    this._cardImage = this._cardElement.querySelector(".photo__img");
+    this._cardName = this._cardElement.querySelector(".photo__name");
+    this._cardLikes = this._cardElement.querySelector(".photo__likes");
+
     return this._cardElement;
   };
 
@@ -53,16 +60,12 @@ export class Card {
 
   // Добавление активности кнопки лайка
   addActiveLikeBtn = () => {
-    this._cardElement
-      .querySelector(".photo__like-btn")
-      .classList.add("photo__like-btn_active");
+    this._btnLike.classList.add("photo__like-btn_active");
   };
 
   // Удаление активности кнопки лайка
   removeActiveLikeBtn = () => {
-    this._cardElement
-      .querySelector(".photo__like-btn")
-      .classList.remove("photo__like-btn_active");
+    this._btnLike.classList.remove("photo__like-btn_active");
   };
 
   // Изменение значения лайков
@@ -86,26 +89,20 @@ export class Card {
   // Подключаем обработчики событий
   _setEventListeners = () => {
     if (this._ownerId !== this._myId) {
-      this._cardElement.querySelector(".photo__delete-btn").remove();
+      this._btnDelete.remove();
     } else {
-      this._cardElement
-        .querySelector(".photo__delete-btn")
-        .addEventListener("click", () => {
-          this._deleteCard(this._cardElement);
-        });
+      this._btnDelete.addEventListener("click", () => {
+        this._deleteCard(this._cardElement);
+      });
     }
 
-    this._cardElement
-      .querySelector(".photo__like-btn")
-      .addEventListener("click", () => {
-        this._likeCard(this._cardElement);
-      });
+    this._btnLike.addEventListener("click", () => {
+      this._likeCard(this._cardElement);
+    });
 
-    this._cardElement
-      .querySelector(".photo__img")
-      .addEventListener("click", () => {
-        this._openPhoto();
-      });
+    this._cardImage.addEventListener("click", () => {
+      this._openPhoto();
+    });
   };
 
   // Создаем карточку
@@ -113,11 +110,10 @@ export class Card {
     this._getTemplate();
 
     this._cardElement.id = this._cardId;
-    this._cardElement.querySelector(".photo__name").textContent = this._name;
-    this._cardElement.querySelector(".photo__img").alt = this._name;
-    this._cardElement.querySelector(".photo__img").src = this._link;
-    this._cardElement.querySelector(".photo__likes").textContent =
-      this._likes.length;
+    this._cardName.textContent = this._name;
+    this._cardImage.alt = this._name;
+    this._cardImage.src = this._link;
+    this._cardLikes.textContent = this._likes.length;
 
     this._checkLike();
 

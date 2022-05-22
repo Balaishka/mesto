@@ -87,10 +87,12 @@ const popupEdit = new PopupWithForm(".popup_name_edit", {
       .then((data) => {
         userInfo.setUserInfo(data);
         popupEdit.close();
-        btnEditForm.textContent = "Сохранить";
       })
       .catch((err) => {
         console.log(`Ошибка: ${err.status}`);
+      })
+      .finally(() => {
+        btnEditForm.textContent = "Сохранить";
       });
   },
 });
@@ -196,13 +198,15 @@ api
                     .then((data) => {
                       card.querySelector(".photo__likes").textContent =
                         data.likes.length;
-                      item.likes = data.likes;
+                        item.likes = data.likes;
+                    })
+                    .then(() => {
+                      photoCard.changeLikes(item.likes, true);
                     })
                     .catch((err) => {
                       console.log(`Ошибка: ${err.status}`);
                     });
 
-                  photoCard.changeLikes(item.likes, true);
                 } else {
                   api
                     .deleteLikeCard(card.id)
@@ -211,11 +215,12 @@ api
                         data.likes.length;
                       item.likes = data.likes;
                     })
+                    .then(() => {
+                      photoCard.changeLikes(item.likes, false);
+                    })
                     .catch((err) => {
                       console.log(`Ошибка: ${err.status}`);
                     });
-
-                  photoCard.changeLikes(item.likes, false);
                 }
               },
 
