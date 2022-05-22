@@ -10,7 +10,7 @@ import { PopupWithImage } from "../components/PopupWithImage.js";
 
 import { PopupWithForm } from "../components/PopupWithForm.js";
 
-import { PopupWithSubmit } from "../components/PopupWithSubmit.js";
+import { PopupWithConfirmation } from "../components/PopupWithConfirmation.js";
 
 import { UserInfo } from "../components/UserInfo.js";
 
@@ -30,8 +30,6 @@ import {
   btnEditAvatarForm,
   btnAddPhotoForm,
 } from "../utils/constants.js";
-
-// ФУНКЦИИ
 
 // Функция открытия попапа редактирования профиля
 function openEdit() {
@@ -53,8 +51,6 @@ function openEditAvatarPopup() {
 
   popupEditAvatar.open();
 }
-
-// ЭКЗЕМПЛЯРЫ КЛАССОВ
 
 // Создаем класс профиля пользователя
 const userInfo = new UserInfo({
@@ -123,22 +119,25 @@ const popupEditAvatar = new PopupWithForm(".popup_name_edit-avatar", {
 const popupWithImage = new PopupWithImage(".popup_name_picture");
 
 // Попап подтверждения удаления
-const popupWithSubmit = new PopupWithSubmit(".popup_name_delete-photo", {
-  handleFormSubmit: (card) => {
-    api
-      .deleteCard(card.id)
-      .then(() => {
-        card.remove();
-        popupWithSubmit.close();
-      })
-      .catch((err) => {
-        console.log(`Ошибка: ${err.status}`);
-      });
-  },
-});
+const popupWithConfirmation = new PopupWithConfirmation(
+  ".popup_name_delete-photo",
+  {
+    handleFormSubmit: (card) => {
+      api
+        .deleteCard(card.id)
+        .then(() => {
+          card.remove();
+          popupWithConfirmation.close();
+        })
+        .catch((err) => {
+          console.log(`Ошибка: ${err.status}`);
+        });
+    },
+  }
+);
 
 // Навешиваем обработчики событий к попапу удаления карточки
-popupWithSubmit.setEventListeners();
+popupWithConfirmation.setEventListeners();
 
 // Навешиваем обработчики событий к попапу обновления аватара
 popupEditAvatar.setEventListeners();
@@ -154,7 +153,7 @@ const api = new Api({
   baseUrl: "https://mesto.nomoreparties.co/v1/cohort-41/",
   headers: {
     "content-type": "application/json",
-    "authorization": "fc4c8120-00e8-40b3-bbab-d69ed1e171f6",
+    authorization: "fc4c8120-00e8-40b3-bbab-d69ed1e171f6",
   },
 });
 
@@ -221,7 +220,7 @@ api
               },
 
               handleDeleteIconClick: (card) => {
-                popupWithSubmit.open(card);
+                popupWithConfirmation.open(card);
               },
             },
             ".photo-template"
