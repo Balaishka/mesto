@@ -108,11 +108,13 @@ const popupEditAvatar = new PopupWithForm(".popup_name_edit-avatar", {
       })
       .then((data) => {
         userInfo.setAvatar(data);
-        btnEditAvatarForm.textContent = "Сохранить";
         popupEditAvatar.close();
       })
       .catch((err) => {
         console.log(`Ошибка: ${err.status}`);
+      })
+      .finally(() => {
+        btnEditAvatarForm.textContent = "Сохранить";
       });
   },
 });
@@ -254,10 +256,12 @@ api
           .then((data) => {
             cardsList.renderer(data); //Создаем карточку и добавляем в разметку
             popupAddPhoto.close();
-            btnAddPhotoForm.textContent = "Создать";
           })
           .catch((err) => {
             console.log(`Ошибка: ${err.status}`);
+          })
+          .finally(() => {
+            btnAddPhotoForm.textContent = "Создать";
           });
       },
     });

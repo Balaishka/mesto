@@ -3,6 +3,7 @@ export class Popup {
     this._selector = selector;
 
     this._popup = document.querySelector(this._selector);
+    this._btnClose = this._popup.querySelector(".popup__close-btn");
   }
 
   _handleEscClose = (event) => {
@@ -22,9 +23,8 @@ export class Popup {
   }
 
   setEventListeners() {
-    const buttonClose = this._popup.querySelector(".popup__close-btn");
-
-    buttonClose.addEventListener("click", () => {
+    
+    this._btnClose.addEventListener("click", () => {
       this.close();
     });
 
